@@ -121,7 +121,8 @@
         },
         "moodleVersion": {
             "allowedValues": [
-                "MOODLE_402_STABLE"
+                "MOODLE_402_STABLE",
+                "MOODLE_39_STABLE"
             ],
             "defaultValue": "MOODLE_402_STABLE",
             "metadata": {
