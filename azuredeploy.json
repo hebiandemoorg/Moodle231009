@@ -536,7 +536,7 @@
         },
         "fileServerDiskCount": {
             "defaultValue": 4,
-            "minValue": 1,
+            "minValue": 2,
             "maxValue": 8,
             "metadata": {
                 "description": "Number of disks in raid0 per gluster node or nfs server"
