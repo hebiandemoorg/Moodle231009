@@ -195,7 +195,8 @@
         },
         "phpVersion": {
             "allowedValues": [
-                "8.1"
+                "8.1",
+                "7.4"
             ],
             "defaultValue": "8.1",
             "metadata": {
