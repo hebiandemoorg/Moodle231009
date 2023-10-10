@@ -797,9 +797,10 @@
         "ubuntuVersion": {
             "type": "string",
             "allowedValues": [
-                "22_04-lts-gen2"
+                "22_04-lts-gen2",
+                "20_04-lts-gen2"
             ],
-            "defaultValue": "22_04-lts-gen2"
+            "defaultValue": "20_04-lts-gen2"
         },
         "location": {
             "type": "string",
@@ -1370,7 +1371,7 @@
             "nfsHaNode1IP": "[concat(variables('subnetSanPrefix'), '.120')]",
             "osDiskStorageType": "[parameters('osDiskStorageType')]",
             "osType": {
-                "offer": "0001-com-ubuntu-server-jammy",
+                "offer": "0001-com-ubuntu-server-focal",
                 "publisher": "Canonical",
                 "sku": "[parameters('ubuntuVersion')]",
                 "version": "latest"
