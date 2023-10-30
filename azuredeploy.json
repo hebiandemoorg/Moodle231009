@@ -124,7 +124,7 @@
                 "MOODLE_402_STABLE",
                 "MOODLE_39_STABLE"
             ],
-            "defaultValue": "MOODLE_402_STABLE",
+            "defaultValue": "MOODLE_39_STABLE",
             "metadata": {
                 "description": "The Moodle version you want to install."
             },
@@ -198,7 +198,7 @@
                 "8.1",
                 "7.4"
             ],
-            "defaultValue": "8.1",
+            "defaultValue": "7.4",
             "metadata": {
                 "description": "php version"
             },
