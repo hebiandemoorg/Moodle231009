@@ -1371,10 +1371,10 @@
             "nfsHaNode1IP": "[concat(variables('subnetSanPrefix'), '.120')]",
             "osDiskStorageType": "[parameters('osDiskStorageType')]",
             "osType": {
-                "offer": "0001-com-ubuntu-server-focal",
-                "publisher": "Canonical",
-                "sku": "[parameters('ubuntuVersion')]",
-                "version": "latest"
+                "offer": "CentOS",
+                "publisher": "OpenLogic",
+                "sku": "7_9-arm64",
+                "version": "7.9.2023101102"
             },
             "phpVersion": "[parameters('phpVersion')]",
             "policyName": "[concat('policy-',variables('resourceprefix'))]",
