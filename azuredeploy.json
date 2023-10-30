@@ -1373,8 +1373,8 @@
             "osType": {
                 "offer": "CentOS",
                 "publisher": "OpenLogic",
-                "sku": "7_9-arm64",
-                "version": "7.9.2023101102"
+                "sku": "7_9",
+                "version": "7.9.2023030700"
             },
             "phpVersion": "[parameters('phpVersion')]",
             "policyName": "[concat('policy-',variables('resourceprefix'))]",
