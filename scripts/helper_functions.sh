@@ -13,9 +13,12 @@ function apt_update_noninteractive {
   export DEBIAN_FRONTEND='noninteractive'
 
   # waiting for apt to finish before running any other commands
-  wait_for_process apt;
-
-  apt --yes -qq -o=Dpkg::Use-Pty=0 update
+  # replace apt with yum start
+  # wait_for_process apt;
+  # apt --yes -qq -o=Dpkg::Use-Pty=0 update
+  wait_for_process yum;
+  yum -y -q makecache
+  # replace apt with yum end
 }
 
 function apt_install_noninteractive {
@@ -24,9 +27,13 @@ function apt_install_noninteractive {
   export ACCEPT_EULA='Y'
 
   # waiting for apt to finish before running any other commands
-  wait_for_process apt;
+  # replace apt with yum start
+  # wait_for_process apt;
+  # apt --yes --no-install-recommends -qq -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install "${@}"
+   wait_for_process yum;
 
-  apt --yes --no-install-recommends -qq -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install "${@}"
+  yum -y -q install "${@}"
+   # replace apt with yum end
 }
 
 function get_setup_params_from_configs_json
@@ -115,9 +122,13 @@ function install_php_mssql_driver
     
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/22.04/prod $AZ_REPO main" > /etc/apt/sources.list.d/mssql-release.list
     
-    wait_for_process apt && \
+    # wait_for_process apt && \
+    # apt_update_noninteractive && \
+    # apt --yes --no-install-recommends -qq install msodbcsql18 mssql-tools18 unixodbc-dev >> /tmp/apt.log
+
+    wait_for_process yum && \
     apt_update_noninteractive && \
-    apt --yes --no-install-recommends -qq install msodbcsql18 mssql-tools18 unixodbc-dev >> /tmp/apt.log
+    yum -y -q install msodbcsql mssql-tools unixODBC-devel >> /tmp/apt.log
     
     echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
     echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
