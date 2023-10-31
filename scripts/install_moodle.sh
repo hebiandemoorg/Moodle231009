@@ -319,7 +319,7 @@ EOF
 
     # Build nginx config
     cat <<EOF > /etc/nginx/nginx.conf
-user www-data;
+user apache;
 worker_processes 2;
 pid /run/nginx.pid;
 
@@ -491,7 +491,7 @@ EOF
             echo -e "Generating SSL self-signed certificate"
             openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /moodle/certs/nginx.key -out /moodle/certs/nginx.crt -subj "/C=US/ST=WA/L=Redmond/O=IT/CN=$siteFQDN"
         fi
-        chown www-data:www-data /moodle/certs/nginx.*
+        chown apache:apache /moodle/certs/nginx.*
         chmod 0400 /moodle/certs/nginx.*
     fi
 
@@ -519,11 +519,11 @@ EOF
    # fpm config - overload this 
    cat <<EOF > /etc/php/${PhpVer}/fpm/pool.d/www.conf
 [www]
-user = www-data
-group = www-data
+user = apache
+group = apache
 listen = /run/php/php${PhpVer}-fpm.sock
-listen.owner = www-data
-listen.group = www-data
+listen.owner = apache
+listen.group = apache
 pm = dynamic
 pm.max_children = 3000
 pm.start_servers = 20 
@@ -903,8 +903,8 @@ EOF
     fi
     sed -i "22 a \$CFG->localcachedir = '/tmp/localcachedir';" /moodle/html/moodle/config.php
     sed -i "22 a \$CFG->alternative_component_cache = '/var/www/html/moodle/core_component.php';" /moodle/html/moodle/config.php
-    chown -R www-data:www-data $dir
-    chgrp www-data $dir
+    chown -R apache:apache $dir
+    chgrp apache $dir
     chmod g+s $dir
     
     if [ "$redisAuth" != "None" ]; then
@@ -969,7 +969,7 @@ EOF
 
    # create cron entry
    # It is scheduled for once per minute. It can be changed as needed.
-   echo '* * * * * www-data /usr/bin/php /moodle/html/moodle/admin/cli/cron.php 2>&1 | /usr/bin/logger -p local2.notice -t moodle' > /etc/cron.d/moodle-cron
+   echo '* * * * * apache /usr/bin/php /moodle/html/moodle/admin/cli/cron.php 2>&1 | /usr/bin/logger -p local2.notice -t moodle' > /etc/cron.d/moodle-cron
 
    # Set up cronned sql dump
    if [ "$dbServerType" = "mysql" ]; then
@@ -990,7 +990,7 @@ EOF
    service varnishncsa stop
    #service varnishlog stop
 
-    # No need to run the commands below any more, as permissions & modes are already as such (no more "sudo -u www-data ...")
+    # No need to run the commands below any more, as permissions & modes are already as such (no more "sudo -u apache ...")
     # Leaving this code as a remark that we are explicitly leaving the ownership to root:root
 #    if [ $fileServerType = "gluster" -o $fileServerType = "nfs" -o $fileServerType = "nfs-ha" ]; then
 #       # make sure Moodle can read its code directory but not write
@@ -999,7 +999,7 @@ EOF
 #       sudo find /moodle/html/moodle -type d -exec chmod 755 '{}' \;
 #    fi
     # But now we need to adjust the moodledata and the certs directory ownerships, and the permission for the generated config.php
-    sudo chown -R www-data.www-data /moodle/moodledata /moodle/certs
+    sudo chown -R apache.apache /moodle/moodledata /moodle/certs
     sudo chmod +r /moodle/html/moodle/config.php
 
     # chmod /moodle for Azure NetApp Files (its default is 770!)
@@ -1018,7 +1018,7 @@ EOF
          # Then create the moodle share
          echo -e '\n\rCreating an Azure Files share for moodle'
          create_azure_files_moodle_share $storageAccountName $storageAccountKey /tmp/wabs.log $fileServerDiskSize
-         # Set up and mount Azure Files share. Must be done after nginx is installed because of www-data user/group
+         # Set up and mount Azure Files share. Must be done after nginx is installed because of apache user/group
          echo -e '\n\rSetting up and mounting Azure Files share on //'$storageAccountName'.file.core.windows.net/moodle on /moodle\n\r'
          setup_and_mount_azure_files_moodle_share $storageAccountName $storageAccountKey
          # Move the local installation over to the Azure Files
