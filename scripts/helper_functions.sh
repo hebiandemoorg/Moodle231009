@@ -17,7 +17,7 @@ function apt_update_noninteractive {
   # wait_for_process apt;
   # apt --yes -qq -o=Dpkg::Use-Pty=0 update
   wait_for_process yum;
-  yum -y -q makecache
+  yum -y -q update
   # replace apt with yum end
 }
 
