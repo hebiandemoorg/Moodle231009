@@ -197,7 +197,7 @@ set -ex
     fi
 
     # install pre-requisites
-    add-apt-repository ppa:ubuntu-toolchain-r/ppa --yes >> /tmp/apt.log
+    # add-apt-repository ppa:ubuntu-toolchain-r/ppa --yes >> /tmp/apt.log
     apt_update_noninteractive >> /tmp/apt.log
     apt_install_noninteractive software-properties-common unzip >> /tmp/apt.log
 
