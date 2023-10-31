@@ -119,17 +119,24 @@ set -ex
     fi
 
     if [ $dbServerType = "mysql" ]; then
-        apt_install_noninteractive mysql-client >> /tmp/apt.log
+        apt_install_noninteractive mysql >> /tmp/apt.log
     elif [ "$dbServerType" = "postgres" ]; then
         apt_install_noninteractive postgresql-client >> /tmp/apt.log
     fi
 
     if [ "$installObjectFsSwitch" = "true" -o "$fileServerType" = "azurefiles" ]; then
         # install azure cli
-        AZ_REPO=$(lsb_release -cs)
-        mkdir -p /etc/apt/keyrings
-        curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/keyrings/microsoft.gpg && chmod go+r /etc/apt/keyrings/microsoft.gpg
-        echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" > /etc/apt/sources.list.d/azure-cli.list
+        echo -e "[azure-cli]
+                    name=Azure CLI
+                    baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+                    enabled=1
+                    gpgcheck=1
+                    gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
+        dnf -y install azure-cli
+        # AZ_REPO=$(lsb_release -cs)
+        # mkdir -p /etc/apt/keyrings
+        # curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/keyrings/microsoft.gpg && chmod go+r /etc/apt/keyrings/microsoft.gpg
+        # echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" > /etc/apt/sources.list.d/azure-cli.list
 
     apt_update_noninteractive >> /tmp/apt.log
 
@@ -219,6 +226,7 @@ set -ex
         php-pear \
         php-mbstring \
         php-dev \
+        dnf \
         mcrypt >> /tmp/apt.log
 
     PhpVer=$(get_php_version)
